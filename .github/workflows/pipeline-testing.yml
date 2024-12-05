@@ -1,27 +1,39 @@
 name : "Testeo de la aplicacion"
 
 on:
-  push:
-    branches:
-      - release
-  pull_request:
-    branches:
-      - release
+    push:
+        branches:
+            - release
+    pull_request:
+        branches:
+            - release
 
 jobs:
-  Testing:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Revise el codigo
-        uses: actions/checkout@v3
+    #primer job
+    Testing:
+        runs-on: ubuntu-latest
+        steps:
+            - name: pase el codigo hacia el ubuntu
+              uses: actions/checkout@v3
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: mbstring, pdo, bcmath
-          ini-values: post_max_size=256M, upload_max_filesize=256M
-          coverage: none
+            - name: instalo php en mi ambiente
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: '8.3'
+                extensions: mbstring, pdo, bcmath
+                ini-values: post_max_size=256M, upload_max_filesize=256M
+                coverage: none
 
-      - name: Saludar
-        run: php --version
+            - name: descarge los paquetes de composer
+              run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+            - name: Create .env file
+              run: |
+                  cp .env.example .env
+
+            - name: Generate application key
+              run: php artisan key:generate
+
+            - name: Run migrations
+              run: php artisan migrate --env=testing
+    
