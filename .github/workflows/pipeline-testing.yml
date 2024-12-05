@@ -1,4 +1,4 @@
-name: "Testing Pipeline Workflow app"
+name : "Testeo de la aplicacion"
 
 on:
   push:
@@ -12,10 +12,10 @@ jobs:
   Testing:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-      - uses: actions/checkout@v3
+      - name: Revise el codigo
+        uses: actions/checkout@v3
 
-      - name: Setup php
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
@@ -23,5 +23,5 @@ jobs:
           ini-values: post_max_size=256M, upload_max_filesize=256M
           coverage: none
 
-      - name: say hello
+      - name: Saludar
         run: php --version
